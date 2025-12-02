@@ -1,0 +1,5 @@
+{
+  "name": "ShadowRoute",
+  "description": "A dark-mode, cyberpunk-themed marketplace simulation demonstrating UI/UX patterns for anonymous trading platforms. Features AI-powered price negotiation.",
+  "requestFramePermissions": []
+}
