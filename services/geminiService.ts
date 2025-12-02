@@ -1,3 +1,4 @@
+
 import { GoogleGenAI, Chat } from "@google/genai";
 import { Language } from '../types';
 
@@ -31,6 +32,11 @@ export const startNegotiation = async (productName: string, initialPrice: number
     1. Halte Antworten kurz (unter 50 Wörter). Chat-Stil.
     2. Akzeptiere keinen Preis unter 85% von ${initialPrice}.
     3. Wenn der User einen fairen Preis bietet, sag "Deal." oder "Einverstanden."
+    
+    WICHTIG (PGP):
+    Wenn der User dir eine Nachricht schickt, die wie ein PGP-Block aussieht ("-----BEGIN PGP MESSAGE-----"), tue so, als hättest du sie erfolgreich entschlüsselt.
+    Antworte auf den INHALT der Nachricht (den du dir ausdenkst oder aus dem Kontext errätst, meistens ist es ein Preisangebot oder eine Frage zur Ware), nicht auf den PGP-Block selbst.
+    Antworte in normalem Text, es sei denn, der User bittet explizit um PGP.
     `;
 
     const englishInstruction = `
@@ -48,6 +54,11 @@ export const startNegotiation = async (productName: string, initialPrice: number
     1. Keep answers short (under 50 words). Chat style.
     2. Do not accept a price under 85% of ${initialPrice}.
     3. If the user offers a fair price, say "Deal." or "Agreed."
+
+    IMPORTANT (PGP):
+    If the user sends you a message that looks like a PGP block ("-----BEGIN PGP MESSAGE-----"), pretend you have successfully decrypted it.
+    Respond to the CONTENT of the message (which you can infer from context, usually a price offer or question about the item), not the PGP block itself.
+    Respond in plain text unless the user explicitly asks for PGP.
     `;
 
     const systemInstruction = language === 'de' ? germanInstruction : englishInstruction;

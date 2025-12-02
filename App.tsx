@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Marketplace } from './components/Marketplace';
@@ -7,15 +6,16 @@ import { Cart } from './components/Cart';
 import { Settings } from './components/Settings';
 import { Login } from './components/Login';
 import { Payment } from './components/Payment';
+import { LoadingScreen } from './components/LoadingScreen';
 import { DigitalAssetPreview } from './components/DigitalAssetPreview';
 import { ViewState, Product, CartItem, Language } from './types';
 import { getProducts, getCategories, getReviews } from './constants';
 import { t } from './translations';
-import { Info, TriangleAlert, User, Star } from 'lucide-react';
+import { Info, User, Star } from 'lucide-react';
 
 const App: React.FC = () => {
   const [view, setView] = useState<ViewState>(ViewState.LOGIN);
-  const [language, setLanguage] = useState<Language>('de');
+  const [language, setLanguage] = useState<Language>('en');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cart, setCart] = useState<CartItem[]>([]);
   const [showNotification, setShowNotification] = useState<string | null>(null);
@@ -91,17 +91,15 @@ const App: React.FC = () => {
   };
 
   if (view === ViewState.LOGIN) {
-      return <Login onLogin={() => setView(ViewState.MARKET)} language={language} />;
+      return <Login onLogin={() => setView(ViewState.LOADING)} language={language} />;
+  }
+
+  if (view === ViewState.LOADING) {
+      return <LoadingScreen onComplete={() => setView(ViewState.MARKET)} language={language} />;
   }
 
   return (
     <div className="min-h-screen bg-[#050505] text-gray-300 font-mono flex flex-col">
-        {/* Safety Disclaimer */}
-        <div className="bg-red-900/20 border-b border-red-900/50 text-red-500 text-xs px-4 py-1 text-center flex items-center justify-center gap-2">
-            <TriangleAlert size={12} />
-            <span>{t(language, 'app.disclaimer')}</span>
-        </div>
-
       <Navbar 
         currentView={view} 
         onNavigate={handleNavigate} 

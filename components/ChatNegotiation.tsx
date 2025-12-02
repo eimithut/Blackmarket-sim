@@ -1,8 +1,10 @@
+
 import React, { useState, useEffect, useRef } from 'react';
-import { Send, Lock, User, Bot, AlertOctagon } from 'lucide-react';
+import { Send, Lock, User, Bot, AlertOctagon, Key } from 'lucide-react';
 import { Product, ChatMessage, Language } from '../types';
 import { startNegotiation, sendMessageToSeller } from '../services/geminiService';
 import { t } from '../translations';
+import { PGPTool } from './PGPTool';
 
 interface ChatNegotiationProps {
   product: Product;
@@ -16,6 +18,7 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [finalPrice, setFinalPrice] = useState<number | null>(null);
+  const [showPGP, setShowPGP] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const initialized = useRef(false);
 
@@ -89,9 +92,13 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
       setMessages(prev => [...prev, botMsg]);
 
       // Simple heuristic to detect if a deal was struck
+      // We look for agreement words even inside "decrypted" PGP if the user used it, 
+      // but the AI is instructed to return plain text responses (or simulated PGP).
       const lowerReply = reply?.toLowerCase() || '';
       const confirmationWords = ['deal', 'agreed', 'einverstanden', 'ok'];
-      if (confirmationWords.some(w => lowerReply.includes(w))) {
+      
+      // If the message is short and positive, it's a deal
+      if (confirmationWords.some(w => lowerReply.includes(w)) && lowerReply.length < 50) {
           setFinalPrice(product.priceBTC);
       }
 
@@ -107,7 +114,10 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
   };
 
   return (
-    <div className="max-w-4xl mx-auto h-[600px] flex flex-col border border-terminal-green bg-black shadow-[0_0_20px_rgba(0,255,65,0.05)]">
+    <div className="max-w-4xl mx-auto h-[600px] flex flex-col border border-terminal-green bg-black shadow-[0_0_20px_rgba(0,255,65,0.05)] relative">
+      
+      {showPGP && <PGPTool onClose={() => setShowPGP(false)} language={language} />}
+
       {/* Chat Header */}
       <div className="bg-gray-900 border-b border-terminal-green/30 p-4 flex justify-between items-center">
         <div className="flex items-center gap-3">
@@ -117,9 +127,18 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
                 <p className="text-xs text-gray-500">{product.name}</p>
             </div>
         </div>
-        <div className="text-right">
-            <p className="text-xs text-terminal-green">{t(language, 'chat.encryption')}</p>
-            <p className="text-xs text-gray-500">{t(language, 'chat.trace')}</p>
+        <div className="flex items-center gap-4">
+            <button 
+                onClick={() => setShowPGP(true)}
+                className="flex items-center gap-1 text-[10px] bg-gray-800 hover:bg-gray-700 px-2 py-1 border border-gray-600 rounded-sm text-terminal-green transition-colors"
+            >
+                <Key size={12} />
+                {t(language, 'chat.pgp_tool')}
+            </button>
+            <div className="text-right">
+                <p className="text-xs text-terminal-green">{t(language, 'chat.encryption')}</p>
+                <p className="text-xs text-gray-500">{t(language, 'chat.trace')}</p>
+            </div>
         </div>
       </div>
 
@@ -147,7 +166,9 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
                 <span>{msg.sender === 'user' ? t(language, 'chat.you') : product.seller}</span>
                 <span>[{msg.timestamp.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}]</span>
               </div>
-              <p className="text-sm leading-relaxed">{msg.text}</p>
+              <p className="text-sm leading-relaxed whitespace-pre-wrap break-words font-mono">
+                {msg.text}
+              </p>
             </div>
           </div>
         ))}

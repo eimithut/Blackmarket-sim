@@ -1,6 +1,7 @@
 
 export enum ViewState {
   LOGIN = 'LOGIN',
+  LOADING = 'LOADING',
   MARKET = 'MARKET',
   DETAILS = 'DETAILS',
   CART = 'CART',

@@ -1,4 +1,5 @@
 
+
 import { Language } from './types';
 
 type TranslationKey = 
@@ -6,12 +7,16 @@ type TranslationKey =
   | 'market.title' | 'market.count' | 'market.search_placeholder' | 'market.no_results' | 'market.no_results_sub'
   | 'card.trust' | 'card.seller' | 'card.id' | 'card.add_fast'
   | 'product.back' | 'product.verified' | 'product.origin' | 'product.stock' | 'product.rating' | 'product.negotiation_info' | 'product.negotiation_note' | 'product.reviews_title'
-  | 'chat.header' | 'chat.encryption' | 'chat.trace' | 'chat.connecting' | 'chat.decoding' | 'chat.input_placeholder' | 'chat.deal_reached' | 'chat.transfer_btn' | 'chat.cancel_btn' | 'chat.you'
+  | 'chat.header' | 'chat.encryption' | 'chat.trace' | 'chat.connecting' | 'chat.decoding' | 'chat.input_placeholder' | 'chat.deal_reached' | 'chat.transfer_btn' | 'chat.cancel_btn' | 'chat.you' | 'chat.pgp_tool'
   | 'cart.title' | 'cart.empty' | 'cart.empty_sub' | 'cart.reserved' | 'cart.quantity' | 'cart.total_escrow' | 'cart.checkout_btn' | 'cart.warning'
-  | 'settings.title' | 'settings.language' | 'settings.account'
+  | 'settings.title' | 'settings.language' | 'settings.account' | 'settings.pgp_key' 
+  | 'settings.section_general' | 'settings.section_security' | 'settings.section_danger'
+  | 'settings.currency' | 'settings.notifications' | 'settings.javascript' | 'settings.images' | 'settings.autologout' | 'settings.wipe_btn' | 'settings.wipe_confirm'
   | 'app.disclaimer' | 'app.footer_text' | 'app.footer_tor' | 'app.notification_added' | 'app.order_success'
   | 'login.title' | 'login.username' | 'login.password' | 'login.captcha' | 'login.enter_btn' | 'login.error_captcha'
-  | 'payment.title' | 'payment.instruction' | 'payment.wallet_label' | 'payment.timer' | 'payment.status_awaiting' | 'payment.status_confirming' | 'payment.status_confirmed' | 'payment.cancel_btn' | 'payment.simulate_btn';
+  | 'payment.title' | 'payment.instruction' | 'payment.wallet_label' | 'payment.timer' | 'payment.status_awaiting' | 'payment.status_confirming' | 'payment.status_confirmed' | 'payment.cancel_btn' | 'payment.simulate_btn'
+  | 'pgp.title' | 'pgp.encrypt_btn' | 'pgp.decrypt_btn' | 'pgp.input_placeholder' | 'pgp.copy_btn' | 'pgp.clear_btn' | 'pgp.close_btn' | 'pgp.generated'
+  | 'loading.mem' | 'loading.bios' | 'loading.net' | 'loading.tor1' | 'loading.tor2' | 'loading.tor3' | 'loading.handshake' | 'loading.keys' | 'loading.ledger' | 'loading.assets' | 'loading.done' | 'loading.access_granted';
 
 const en: Record<TranslationKey, string> = {
   'nav.market': '[MARKETPLACE]',
@@ -42,11 +47,12 @@ const en: Record<TranslationKey, string> = {
   'chat.trace': 'TRACELESS: YES',
   'chat.connecting': 'Establishing secure PGP connection to seller...',
   'chat.decoding': '> DECODING REPLY...',
-  'chat.input_placeholder': 'Enter message...',
+  'chat.input_placeholder': 'Enter message (PGP recommended)...',
   'chat.deal_reached': 'AGREEMENT REACHED',
   'chat.transfer_btn': 'TRANSFER BTC',
   'chat.cancel_btn': 'ABORT',
   'chat.you': 'YOU',
+  'chat.pgp_tool': 'PGP TOOL',
   'cart.title': 'Pending Transactions',
   'cart.empty': 'CART EMPTY',
   'cart.empty_sub': 'No encrypted assets selected.',
@@ -58,6 +64,17 @@ const en: Record<TranslationKey, string> = {
   'settings.title': 'System Configuration',
   'settings.language': 'Interface Language',
   'settings.account': 'Account Status',
+  'settings.pgp_key': 'Your Public PGP Key',
+  'settings.section_general': 'General Preferences',
+  'settings.section_security': 'OpSec & Security',
+  'settings.section_danger': 'Danger Zone',
+  'settings.currency': 'Display Currency',
+  'settings.notifications': 'Desktop Notifications',
+  'settings.javascript': 'Enable JavaScript (Risky)',
+  'settings.images': 'Load Remote Images',
+  'settings.autologout': 'Auto-Logout Timer',
+  'settings.wipe_btn': 'WIPE SESSION DATA',
+  'settings.wipe_confirm': 'SESSION DESTROYED',
   'app.disclaimer': 'SIMULATION ONLY. ALL ITEMS FICTIONAL. DO NOT ATTEMPT REAL ILLEGAL TRANSACTIONS.',
   'app.footer_text': 'SHADOWROUTE DECENTRALIZED MARKET // v3.0.1-alpha',
   'app.footer_tor': 'TOR HIDDEN SERVICE: 7357...onion',
@@ -77,7 +94,27 @@ const en: Record<TranslationKey, string> = {
   'payment.status_confirming': 'DETECTED IN MEMPOOL (0/3)...',
   'payment.status_confirmed': 'CONFIRMED. STARTING MIXER...',
   'payment.cancel_btn': 'CANCEL ORDER',
-  'payment.simulate_btn': '[SIMULATE CONFIRMATION]'
+  'payment.simulate_btn': '[SIMULATE CONFIRMATION]',
+  'pgp.title': 'PGP ENCRYPTION SUITE',
+  'pgp.encrypt_btn': 'ENCRYPT MSG',
+  'pgp.decrypt_btn': 'DECRYPT MSG',
+  'pgp.input_placeholder': 'Enter cleartext or paste PGP block here...',
+  'pgp.copy_btn': 'COPY OUTPUT',
+  'pgp.clear_btn': 'CLEAR',
+  'pgp.close_btn': 'CLOSE TOOL',
+  'pgp.generated': 'BLOCK GENERATED',
+  'loading.mem': 'Allocating virtual memory...',
+  'loading.bios': 'Checking virtual BIOS integrity...',
+  'loading.net': 'Masking local hardware ID...',
+  'loading.tor1': 'Connecting to Entry Node (France)...',
+  'loading.tor2': 'Routing through Relay (Panama)...',
+  'loading.tor3': 'Exiting via Node (Russia)...',
+  'loading.handshake': 'Performing Handshake (RSA-4096)...',
+  'loading.keys': 'Verifying Session Keys...',
+  'loading.ledger': 'Syncing with Decentralized Ledger...',
+  'loading.assets': 'Decrypting Marketplace Assets...',
+  'loading.done': 'Secure Connection Established.',
+  'loading.access_granted': 'ACCESS GRANTED'
 };
 
 const de: Record<TranslationKey, string> = {
@@ -109,11 +146,12 @@ const de: Record<TranslationKey, string> = {
   'chat.trace': 'SPURLOS: JA',
   'chat.connecting': 'Sichere PGP-Verbindung zum Verkäufer wird aufgebaut...',
   'chat.decoding': '> ENTSCHLÜSSELE ANTWORT...',
-  'chat.input_placeholder': 'Nachricht eingeben...',
+  'chat.input_placeholder': 'Nachricht eingeben (PGP empfohlen)...',
   'chat.deal_reached': 'EINIGUNG ERZIELT',
   'chat.transfer_btn': 'TRANSFERIERE BTC',
   'chat.cancel_btn': 'ABBRUCH',
   'chat.you': 'DU',
+  'chat.pgp_tool': 'PGP TOOL',
   'cart.title': 'Ausstehende Transaktionen',
   'cart.empty': 'WARENKORB LEER',
   'cart.empty_sub': 'Keine verschlüsselten Assets ausgewählt.',
@@ -125,6 +163,17 @@ const de: Record<TranslationKey, string> = {
   'settings.title': 'System Konfiguration',
   'settings.language': 'Interface Sprache',
   'settings.account': 'Account Status',
+  'settings.pgp_key': 'Dein Öffentlicher PGP Key',
+  'settings.section_general': 'Allgemeine Einstellungen',
+  'settings.section_security': 'Sicherheit & OpSec',
+  'settings.section_danger': 'Gefahrenzone',
+  'settings.currency': 'Anzeigewährung',
+  'settings.notifications': 'Desktop Benachrichtigungen',
+  'settings.javascript': 'JavaScript aktivieren (Riskant)',
+  'settings.images': 'Bilder laden',
+  'settings.autologout': 'Auto-Logout Timer',
+  'settings.wipe_btn': 'SESSION DATEN LÖSCHEN',
+  'settings.wipe_confirm': 'SESSION ZERSTÖRT',
   'app.disclaimer': 'NUR SIMULATION. ALLE ARTIKEL SIND FIKTIV. VERSUCHEN SIE KEINE ECHTEN ILLEGALEN TRANSAKTIONEN.',
   'app.footer_text': 'SHADOWROUTE DEZENTRALER MARKTPLATZ // v3.0.1-alpha',
   'app.footer_tor': 'TOR HIDDEN SERVICE: 7357...onion',
@@ -144,7 +193,27 @@ const de: Record<TranslationKey, string> = {
   'payment.status_confirming': 'ERKANNT IM MEMPOOL (0/3)...',
   'payment.status_confirmed': 'BESTÄTIGT. MIXER STARTET...',
   'payment.cancel_btn': 'ABBRECHEN',
-  'payment.simulate_btn': '[SIMULATION: BESTÄTIGUNG]'
+  'payment.simulate_btn': '[SIMULATION: BESTÄTIGUNG]',
+  'pgp.title': 'PGP VERSCHLÜSSELUNG',
+  'pgp.encrypt_btn': 'VERSCHLÜSSELN',
+  'pgp.decrypt_btn': 'ENTSCHLÜSSELN',
+  'pgp.input_placeholder': 'Klartext oder PGP Block hier einfügen...',
+  'pgp.copy_btn': 'OUTPUT KOPIEREN',
+  'pgp.clear_btn': 'LEEREN',
+  'pgp.close_btn': 'TOOL SCHLIESSEN',
+  'pgp.generated': 'BLOCK GENERIERT',
+  'loading.mem': 'Allokiere virtuellen Speicher...',
+  'loading.bios': 'Prüfe virtuelle BIOS Integrität...',
+  'loading.net': 'Maskiere lokale Hardware-ID...',
+  'loading.tor1': 'Verbinde zu Entry Node (Frankreich)...',
+  'loading.tor2': 'Route über Relay (Panama)...',
+  'loading.tor3': 'Exit über Node (Russland)...',
+  'loading.handshake': 'Führe Handshake aus (RSA-4096)...',
+  'loading.keys': 'Verifiziere Session-Keys...',
+  'loading.ledger': 'Synchronisiere mit dezentralem Ledger...',
+  'loading.assets': 'Entschlüssele Marktplatz-Assets...',
+  'loading.done': 'Sichere Verbindung hergestellt.',
+  'loading.access_granted': 'ZUGRIFF GEWÄHRT'
 };
 
 export const translations = { en, de };
