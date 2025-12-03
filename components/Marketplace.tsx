@@ -40,7 +40,7 @@ export const Marketplace: React.FC<MarketplaceProps> = ({ products, categories, 
           <h1 className="text-2xl font-bold text-white mb-1 glitch-text" data-text={t(language, 'market.title')}>
             {t(language, 'market.title')}
           </h1>
-          <p className="text-gray-500 text-sm font-mono">&gt; {filteredProducts.length} {t(language, 'market.count')}.</p>
+          <p className="text-gray-500 text-sm font-mono">> {filteredProducts.length} {t(language, 'market.count')}.</p>
         </div>
 
         <div className="flex flex-col sm:flex-row gap-3">
