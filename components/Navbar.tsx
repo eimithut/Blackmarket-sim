@@ -1,5 +1,6 @@
-import React from 'react';
-import { ShoppingCart, Terminal, User, Settings as SettingsIcon } from 'lucide-react';
+
+import React, { useState } from 'react';
+import { ShoppingCart, Terminal, User, Settings as SettingsIcon, Menu, X } from 'lucide-react';
 import { ViewState, Language } from '../types';
 import { t } from '../translations';
 
@@ -11,13 +12,20 @@ interface NavbarProps {
 }
 
 export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, cartCount, language }) => {
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const handleNav = (view: ViewState) => {
+    onNavigate(view);
+    setIsMobileMenuOpen(false);
+  };
+
   return (
     <nav className="sticky top-0 z-50 border-b border-terminal-dim bg-black/90 backdrop-blur-md text-terminal-green shadow-[0_0_15px_rgba(0,255,65,0.1)]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
           
           {/* Logo */}
-          <div className="flex items-center cursor-pointer group" onClick={() => onNavigate(ViewState.MARKET)}>
+          <div className="flex items-center cursor-pointer group shrink-0" onClick={() => handleNav(ViewState.MARKET)}>
             <div className="border border-terminal-green p-1 mr-2 group-hover:bg-terminal-green group-hover:text-black transition-colors duration-300">
               <Terminal size={20} />
             </div>
@@ -44,26 +52,26 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, cartCou
             </div>
           </div>
 
-          {/* Icons */}
-          <div className="flex items-center space-x-4">
+          {/* Icons (Visible on Mobile & Desktop) */}
+          <div className="flex items-center space-x-2 md:space-x-4">
             <button 
-                onClick={() => onNavigate(ViewState.SETTINGS)}
-                className={`p-2 hover:bg-gray-800 rounded-full transition-colors relative ${currentView === ViewState.SETTINGS ? 'text-terminal-green' : 'text-gray-400'}`}
+                onClick={() => handleNav(ViewState.SETTINGS)}
+                className={`p-2 hover:bg-gray-800 rounded-full transition-colors relative hidden sm:block ${currentView === ViewState.SETTINGS ? 'text-terminal-green' : 'text-gray-400'}`}
                 title="Settings"
             >
                 <SettingsIcon size={20} />
             </button>
             
             <button 
-                onClick={() => onNavigate(ViewState.PROFILE)}
-                className={`p-2 hover:bg-gray-800 rounded-full transition-colors relative ${currentView === ViewState.PROFILE ? 'text-terminal-green' : 'text-gray-400'}`}
+                onClick={() => handleNav(ViewState.PROFILE)}
+                className={`p-2 hover:bg-gray-800 rounded-full transition-colors relative hidden sm:block ${currentView === ViewState.PROFILE ? 'text-terminal-green' : 'text-gray-400'}`}
                 title="Profile"
             >
                 <User size={20} />
             </button>
             
             <button 
-              onClick={() => onNavigate(ViewState.CART)}
+              onClick={() => handleNav(ViewState.CART)}
               className={`p-2 hover:bg-gray-800 rounded-full transition-colors relative ${currentView === ViewState.CART ? 'text-terminal-green' : 'text-gray-400'}`}
               title="Cart"
             >
@@ -74,9 +82,56 @@ export const Navbar: React.FC<NavbarProps> = ({ currentView, onNavigate, cartCou
                 </span>
               )}
             </button>
+
+            {/* Mobile Menu Toggle */}
+            <button 
+              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              className="md:hidden p-2 hover:bg-gray-800 rounded-full transition-colors text-gray-400"
+            >
+              {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            </button>
           </div>
         </div>
       </div>
+
+      {/* Mobile Menu Dropdown */}
+      {isMobileMenuOpen && (
+        <div className="md:hidden bg-black border-b border-gray-800 animate-slideDown absolute w-full left-0 top-16 shadow-2xl z-40">
+           <div className="px-4 pt-2 pb-6 space-y-4">
+              <button 
+                onClick={() => handleNav(ViewState.MARKET)}
+                className={`block w-full text-left py-3 border-b border-gray-900 uppercase tracking-widest ${currentView === ViewState.MARKET ? 'text-terminal-green font-bold' : 'text-gray-400'}`}
+              >
+                {t(language, 'nav.market')}
+              </button>
+              
+              <button 
+                onClick={() => handleNav(ViewState.SETTINGS)}
+                className={`block w-full text-left py-3 border-b border-gray-900 uppercase tracking-widest ${currentView === ViewState.SETTINGS ? 'text-terminal-green font-bold' : 'text-gray-400'}`}
+              >
+                 {t(language, 'nav.settings')}
+              </button>
+
+              <button 
+                onClick={() => handleNav(ViewState.PROFILE)}
+                className={`block w-full text-left py-3 border-b border-gray-900 uppercase tracking-widest ${currentView === ViewState.PROFILE ? 'text-terminal-green font-bold' : 'text-gray-400'}`}
+              >
+                 {t(language, 'nav.profile')}
+              </button>
+
+              <div className="pt-2 flex justify-between items-center text-sm">
+                 <div className="flex items-center space-x-2 text-gray-500">
+                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                    <span>{t(language, 'nav.relay')}</span>
+                 </div>
+                 <div className="text-right">
+                    <span className="text-gray-600 text-xs mr-2">{t(language, 'nav.balance')}:</span>
+                    <span className="font-mono text-white">4.2069 BTC</span>
+                 </div>
+              </div>
+           </div>
+        </div>
+      )}
     </nav>
   );
 };

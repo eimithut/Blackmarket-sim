@@ -114,28 +114,28 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
   };
 
   return (
-    <div className="max-w-4xl mx-auto h-[600px] flex flex-col border border-terminal-green bg-black shadow-[0_0_20px_rgba(0,255,65,0.05)] relative">
+    <div className="max-w-4xl mx-auto h-[calc(100vh-200px)] md:h-[600px] flex flex-col border border-terminal-green bg-black shadow-[0_0_20px_rgba(0,255,65,0.05)] relative">
       
       {showPGP && <PGPTool onClose={() => setShowPGP(false)} language={language} />}
 
       {/* Chat Header */}
-      <div className="bg-gray-900 border-b border-terminal-green/30 p-4 flex justify-between items-center">
-        <div className="flex items-center gap-3">
-            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(255,0,0,0.8)]"></div>
-            <div>
-                <h2 className="text-white font-mono font-bold">{t(language, 'chat.header')} // {product.seller}</h2>
-                <p className="text-xs text-gray-500">{product.name}</p>
+      <div className="bg-gray-900 border-b border-terminal-green/30 p-3 md:p-4 flex justify-between items-center shrink-0">
+        <div className="flex items-center gap-3 overflow-hidden">
+            <div className="w-3 h-3 bg-red-500 rounded-full animate-pulse shadow-[0_0_8px_rgba(255,0,0,0.8)] shrink-0"></div>
+            <div className="truncate">
+                <h2 className="text-white font-mono font-bold text-sm md:text-base truncate">{t(language, 'chat.header')} // {product.seller}</h2>
+                <p className="text-[10px] md:text-xs text-gray-500 truncate">{product.name}</p>
             </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4 shrink-0">
             <button 
                 onClick={() => setShowPGP(true)}
                 className="flex items-center gap-1 text-[10px] bg-gray-800 hover:bg-gray-700 px-2 py-1 border border-gray-600 rounded-sm text-terminal-green transition-colors"
             >
                 <Key size={12} />
-                {t(language, 'chat.pgp_tool')}
+                <span className="hidden sm:inline">{t(language, 'chat.pgp_tool')}</span>
             </button>
-            <div className="text-right">
+            <div className="text-right hidden sm:block">
                 <p className="text-xs text-terminal-green">{t(language, 'chat.encryption')}</p>
                 <p className="text-xs text-gray-500">{t(language, 'chat.trace')}</p>
             </div>
@@ -146,7 +146,7 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
       <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-black/80 font-mono relative">
         {/* Background watermark */}
         <div className="absolute inset-0 flex items-center justify-center opacity-5 pointer-events-none">
-            <Lock size={200} />
+            <Lock size={150} />
         </div>
 
         {messages.map((msg) => (
@@ -155,7 +155,7 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
             className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
           >
             <div 
-              className={`max-w-[80%] p-3 border ${
+              className={`max-w-[85%] md:max-w-[80%] p-3 border ${
                 msg.sender === 'user' 
                   ? 'bg-gray-900 border-gray-700 text-gray-200' 
                   : 'bg-terminal-dim/10 border-terminal-green/40 text-terminal-green'
@@ -183,21 +183,21 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
       </div>
 
       {/* Input Area */}
-      <div className="p-4 bg-gray-900 border-t border-terminal-green/30">
+      <div className="p-3 md:p-4 bg-gray-900 border-t border-terminal-green/30 shrink-0">
         
         {finalPrice ? (
             <div className="flex flex-col items-center justify-center p-4 bg-terminal-green/10 border border-terminal-green mb-2 text-center">
-                <p className="text-terminal-green font-bold mb-2">{t(language, 'chat.deal_reached')}</p>
-                <div className="flex gap-4">
+                <p className="text-terminal-green font-bold mb-2 text-sm md:text-base">{t(language, 'chat.deal_reached')}</p>
+                <div className="flex flex-col sm:flex-row gap-2 sm:gap-4 w-full justify-center">
                     <button 
                         onClick={handleAccept}
-                        className="bg-terminal-green text-black font-bold px-6 py-2 hover:bg-white transition-colors uppercase"
+                        className="bg-terminal-green text-black font-bold px-4 py-2 hover:bg-white transition-colors uppercase text-xs md:text-sm"
                     >
                         {t(language, 'chat.transfer_btn')} ({finalPrice} BTC)
                     </button>
                      <button 
                         onClick={onCancel}
-                        className="border border-red-500 text-red-500 font-bold px-6 py-2 hover:bg-red-500 hover:text-white transition-colors uppercase"
+                        className="border border-red-500 text-red-500 font-bold px-4 py-2 hover:bg-red-500 hover:text-white transition-colors uppercase text-xs md:text-sm"
                     >
                         {t(language, 'chat.cancel_btn')}
                     </button>
@@ -211,26 +211,11 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
                 onChange={(e) => setInput(e.target.value)}
                 onKeyDown={(e) => e.key === 'Enter' && handleSend()}
                 placeholder={t(language, 'chat.input_placeholder')}
-                className="flex-1 bg-black border border-gray-700 text-gray-200 p-3 focus:outline-none focus:border-terminal-green font-mono text-sm"
+                className="flex-1 bg-black border border-gray-700 text-gray-200 p-2 md:p-3 focus:outline-none focus:border-terminal-green font-mono text-sm"
                 disabled={loading}
             />
             <button 
                 onClick={handleSend}
                 disabled={loading}
-                className="bg-gray-800 hover:bg-terminal-green hover:text-black text-terminal-green border border-terminal-green/50 p-3 transition-colors disabled:opacity-50"
+                className="bg-gray-800 hover:bg-terminal-green hover:text-black text-terminal-green border border-terminal-green/50 p-2 md:p-3 transition-colors disabled:opacity-50"
             >
-                <Send size={20} />
-            </button>
-            <button 
-                onClick={onCancel}
-                className="bg-gray-900 hover:bg-red-900/30 text-gray-500 hover:text-red-500 border border-gray-700 p-3 transition-colors"
-                title="Disconnect"
-            >
-                <AlertOctagon size={20} />
-            </button>
-            </div>
-        )}
-      </div>
-    </div>
-  );
-};

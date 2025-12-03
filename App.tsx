@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Navbar } from './components/Navbar';
 import { Marketplace } from './components/Marketplace';
 import { ChatNegotiation } from './components/ChatNegotiation';
@@ -24,6 +24,35 @@ const App: React.FC = () => {
 
   const currentProducts = getProducts(language);
   const currentCategories = getCategories(language);
+
+  // Feature: Hold 'c' for 4 seconds to trigger Takedown
+  useEffect(() => {
+    let timer: ReturnType<typeof setTimeout>;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      // Check if 'c' is pressed and it's not a repeated event (holding key sends multiple events)
+      if (e.key.toLowerCase() === 'c' && !e.repeat) {
+        timer = setTimeout(() => {
+          setView(ViewState.TAKEDOWN);
+        }, 4000);
+      }
+    };
+
+    const handleKeyUp = (e: KeyboardEvent) => {
+      if (e.key.toLowerCase() === 'c') {
+        clearTimeout(timer);
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+      clearTimeout(timer);
+    };
+  }, []);
 
   // Helper to get localized version of a product (even if it's in the cart)
   const getLocalizedProduct = (p: Product) => {
@@ -178,54 +207,41 @@ const App: React.FC = () => {
                         <div className="grid grid-cols-2 gap-4 text-sm text-gray-500 border-t border-gray-800 pt-4">
                             <div>{t(language, 'product.origin')}: <span className="text-gray-300">{localizedSelectedProduct.origin}</span></div>
                             <div>{t(language, 'product.stock')}: <span className="text-gray-300">{localizedSelectedProduct.stock}</span></div>
-                            <div>{t(language, 'card.seller')}: <span className="text-gray-300">{localizedSelectedProduct.seller}</span></div>
-                            <div>{t(language, 'product.rating')}: <span className="text-terminal-green">★★★★★ ({localizedSelectedProduct.rating})</span></div>
-                        </div>
-                    </div>
-
-                    {/* Reviews Section */}
-                    <div className="border border-gray-800 bg-black p-6">
-                        <h3 className="text-white font-bold mb-4 flex items-center gap-2">
-                             <Star className="text-terminal-green" size={16} />
-                             {t(language, 'product.reviews_title')}
-                        </h3>
-                        <div className="space-y-4">
-                            {getReviews(language).map((review, idx) => (
-                                <div key={idx} className="border-b border-gray-900 pb-3 last:border-0 last:pb-0">
-                                    <div className="flex justify-between items-center mb-1">
-                                        <span className="text-terminal-green text-xs font-bold">{review.user}</span>
-                                        <span className="text-gray-600 text-xs">{review.date}</span>
-                                    </div>
-                                    <div className="text-yellow-500 text-xs mb-1">
-                                        {'★'.repeat(review.rating)}{'☆'.repeat(5 - review.rating)}
-                                    </div>
-                                    <p className="text-gray-400 text-sm italic">"{review.comment}"</p>
-                                </div>
-                            ))}
+                            <div>{t(language, 'product.rating')}: <span className="text-terminal-green flex items-center gap-1"><Star size={12} fill="currentColor" /> {localizedSelectedProduct.rating}</span></div>
                         </div>
                     </div>
                 </div>
 
-                {/* Chat/Action Right */}
-                <div className="space-y-6">
-                    <div className="bg-terminal-dim/5 border border-terminal-dim/20 p-4 mb-4">
-                        <div className="flex gap-3">
-                            <Info className="text-terminal-green flex-shrink-0" size={20} />
-                            <p className="text-sm text-gray-400">
-                                {t(language, 'product.negotiation_info')} 
-                                <span className="block mt-1 text-white font-bold">{localizedSelectedProduct.priceBTC} BTC</span>
-                                <span className="block mt-1">{t(language, 'product.negotiation_note')}</span>
-                            </p>
-                        </div>
-                    </div>
-
-                    <ChatNegotiation 
-                        product={localizedSelectedProduct} 
+                {/* Right Column: Chat or Reviews */}
+                 <div className="space-y-6">
+                     <ChatNegotiation 
+                        product={localizedSelectedProduct}
                         onAddToCart={handleNegotiatedAddToCart}
                         onCancel={() => setView(ViewState.MARKET)}
                         language={language}
-                    />
-                </div>
+                     />
+                     
+                     {/* Reviews */}
+                     <div className="border border-gray-800 bg-gray-900/20 p-6">
+                         <h3 className="text-white font-bold mb-4 uppercase text-sm border-b border-gray-800 pb-2">{t(language, 'product.reviews_title')}</h3>
+                         <div className="space-y-4">
+                             {getReviews(language).map((review, idx) => (
+                                 <div key={idx} className="text-sm">
+                                     <div className="flex justify-between items-center mb-1">
+                                         <span className="text-gray-300 font-bold">{review.user}</span>
+                                         <span className="text-xs text-gray-600">{review.date}</span>
+                                     </div>
+                                     <div className="flex text-terminal-green mb-1">
+                                         {[...Array(5)].map((_, i) => (
+                                             <Star key={i} size={10} fill={i < review.rating ? "currentColor" : "none"} className={i < review.rating ? "" : "text-gray-800"} />
+                                         ))}
+                                     </div>
+                                     <p className="text-gray-500 italic">"{review.comment}"</p>
+                                 </div>
+                             ))}
+                         </div>
+                     </div>
+                 </div>
             </div>
           </div>
         )}
@@ -235,66 +251,52 @@ const App: React.FC = () => {
                 items={localizedCart} 
                 onRemove={handleRemoveFromCart} 
                 onCheckout={handleCheckout} 
-                language={language}
+                language={language} 
             />
-        )}
-
-        {view === ViewState.PAYMENT && (
-            <Payment 
-                totalAmount={cart.reduce((a, b) => a + (b.priceBTC * b.quantity), 0)}
-                onComplete={handlePaymentComplete}
-                onCancel={() => setView(ViewState.CART)}
-                language={language}
-            />
-        )}
-        
-        {view === ViewState.PROFILE && (
-            <div className="max-w-2xl mx-auto border border-gray-800 bg-gray-900/30 p-8 text-center animate-fadeIn">
-                <div className="w-24 h-24 bg-gray-800 rounded-full mx-auto mb-4 flex items-center justify-center">
-                    <User size={40} className="text-gray-500" />
-                </div>
-                <h2 className="text-2xl text-white font-bold mb-2">ANONYMOUS</h2>
-                <p className="text-gray-500 font-mono text-sm mb-6">ID: 0x9f8...3a2</p>
-                <div className="grid grid-cols-3 gap-4 border-t border-gray-800 pt-6">
-                    <div>
-                        <div className="text-2xl text-terminal-green font-bold">4</div>
-                        <div className="text-xs text-gray-600 uppercase">Orders</div>
-                    </div>
-                    <div>
-                        <div className="text-2xl text-terminal-green font-bold">100%</div>
-                        <div className="text-xs text-gray-600 uppercase">Reputation</div>
-                    </div>
-                    <div>
-                        <div className="text-2xl text-terminal-green font-bold">0</div>
-                        <div className="text-xs text-gray-600 uppercase">Disputes</div>
-                    </div>
-                </div>
-            </div>
         )}
 
         {view === ViewState.SETTINGS && (
             <Settings 
                 language={language} 
-                onToggleLanguage={setLanguage}
-                onNavigate={handleNavigate}
+                onToggleLanguage={setLanguage} 
+                onNavigate={setView}
             />
+        )}
+        
+        {view === ViewState.PROFILE && (
+             <div className="flex flex-col items-center justify-center h-96 text-gray-500">
+                 <User size={48} className="mb-4 opacity-50" />
+                 <p>PROFILE DATA ENCRYPTED</p>
+                 <p className="text-xs">Access Restricted to Owner</p>
+             </div>
+        )}
+
+        {view === ViewState.PAYMENT && (
+             <Payment 
+                totalAmount={cart.reduce((a, b) => a + (b.priceBTC * b.quantity), 0)}
+                onComplete={handlePaymentComplete}
+                onCancel={() => setView(ViewState.CART)}
+                language={language}
+             />
         )}
 
       </main>
 
-      {/* Notification Toast */}
+      {/* Footer */}
+      <footer className="border-t border-gray-800 bg-black py-6 mt-8">
+        <div className="max-w-7xl mx-auto px-4 text-center">
+            <p className="text-xs text-gray-600 mb-2">{t(language, 'app.footer_text')}</p>
+            <p className="text-[10px] text-gray-700 font-mono">{t(language, 'app.footer_tor')}</p>
+            <p className="text-[10px] text-red-900/50 mt-4">{t(language, 'app.disclaimer')}</p>
+        </div>
+      </footer>
+
+      {/* Notifications */}
       {showNotification && (
-          <div className="fixed bottom-8 right-8 bg-terminal-green text-black px-6 py-4 font-bold shadow-[0_0_20px_rgba(0,255,65,0.4)] animate-bounce border-l-4 border-black z-50">
+          <div className="fixed bottom-4 right-4 bg-terminal-green text-black px-6 py-3 font-bold shadow-[0_0_20px_rgba(0,255,65,0.4)] animate-slideIn">
               {showNotification}
           </div>
       )}
-
-      <footer className="border-t border-gray-900 mt-12 py-6">
-          <div className="max-w-7xl mx-auto px-4 text-center text-xs text-gray-700 font-mono">
-              <p>{t(language, 'app.footer_text')}</p>
-              <p className="mt-1">{t(language, 'app.footer_tor')}</p>
-          </div>
-      </footer>
     </div>
   );
 };
