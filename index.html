@@ -23,7 +23,7 @@
               'slideDown': 'slideDown 0.3s ease-out',
               'slideIn': 'slideIn 0.3s ease-out',
               'fadeIn': 'fadeIn 0.5s ease-out',
-              'tv-on': 'tvOn 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards',
+              'tv-on': 'tvOn 2.5s cubic-bezier(0.23, 1, 0.32, 1) forwards',
             },
             keyframes: {
               slideDown: {
@@ -39,9 +39,9 @@
                 '100%': { opacity: '1' },
               },
               tvOn: {
-                '0%': { transform: 'scale(1, 0.002)' },
-                '50%': { transform: 'scale(1, 0.002)', background: '#fff' },
-                '55%': { transform: 'scale(1, 1)', background: '#fff' },
+                '0%': { transform: 'scale(1, 0.002)', opacity: '0' },
+                '20%': { transform: 'scale(1, 0.002)', opacity: '1' },
+                '50%': { transform: 'scale(1, 0.002)' },
                 '100%': { transform: 'scale(1, 1)' }
               }
             }
@@ -55,8 +55,8 @@
   "imports": {
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "react": "https://aistudiocdn.com/react@^19.2.0",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
     "vite": "https://aistudiocdn.com/vite@^7.2.6",
     "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"

@@ -85,7 +85,7 @@ export const LoadingScreen: React.FC<LoadingScreenProps> = ({ onComplete, langua
 
   if (phase === 'success') {
       return (
-          <div className="animate-tv-on overflow-hidden relative">
+          <div className="min-h-screen w-full flex items-center justify-center bg-black animate-tv-on overflow-hidden relative">
                {/* Background flash */}
                <div className="absolute inset-0 bg-terminal-green/5 animate-pulse pointer-events-none"></div>
                
