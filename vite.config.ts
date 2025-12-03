@@ -3,16 +3,23 @@ import react from '@vitejs/plugin-react'
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Load env file based on `mode` in the current working directory.
-  // Set the third parameter to '' to load all env regardless of the `VITE_` prefix.
-  const env = loadEnv(mode, (process as any).cwd(), '')
-
+  // Use '.' instead of process.cwd() to avoid type issues
+  const env = loadEnv(mode, '.', '');
   return {
     plugins: [react()],
     define: {
-      // Polyfill process.env so the app doesn't crash on Cloudflare
       'process.env.API_KEY': JSON.stringify(env.API_KEY),
-      'process.env': JSON.stringify(env)
+    },
+    build: {
+      rollupOptions: {
+        // Treat this package as external (do not bundle)
+        external: ['@google/genai'],
+        output: {
+          globals: {
+            '@google/genai': 'GoogleGenAI'
+          }
+        }
+      }
     }
   }
 })
