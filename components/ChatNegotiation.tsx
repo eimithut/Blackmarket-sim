@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect, useRef } from 'react';
 import { Send, Lock, User, Bot, AlertOctagon, Key } from 'lucide-react';
 import { Product, ChatMessage, Language } from '../types';
@@ -219,3 +218,11 @@ export const ChatNegotiation: React.FC<ChatNegotiationProps> = ({ product, onAdd
                 disabled={loading}
                 className="bg-gray-800 hover:bg-terminal-green hover:text-black text-terminal-green border border-terminal-green/50 p-2 md:p-3 transition-colors disabled:opacity-50"
             >
+                <Send size={18} />
+            </button>
+            </div>
+        )}
+      </div>
+    </div>
+  );
+};

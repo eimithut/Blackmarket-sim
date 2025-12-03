@@ -1,10 +1,10 @@
+
 import { GoogleGenAI, Chat } from "@google/genai";
 import { Language } from '../types';
 
 let chatSession: Chat | null = null;
 
 const createClient = () => {
-    // This relies on vite.config.ts replacing process.env.API_KEY
     const apiKey = process.env.API_KEY;
     if (!apiKey) {
         console.error("API Key not found");
