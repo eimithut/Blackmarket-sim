@@ -7,7 +7,8 @@ export enum ViewState {
   CART = 'CART',
   PROFILE = 'PROFILE',
   SETTINGS = 'SETTINGS',
-  PAYMENT = 'PAYMENT'
+  PAYMENT = 'PAYMENT',
+  TAKEDOWN = 'TAKEDOWN'
 }
 
 export type Language = 'de' | 'en';

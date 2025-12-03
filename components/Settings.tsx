@@ -2,7 +2,7 @@
 import React, { useState } from 'react';
 import { Language, ViewState } from '../types';
 import { t } from '../translations';
-import { Shield, Globe, Key, AlertTriangle, Eye, EyeOff, Bell, Clock, Trash2, Cpu } from 'lucide-react';
+import { Shield, Globe, Key, AlertTriangle, Eye, EyeOff, Bell, Clock, Trash2, Cpu, Siren } from 'lucide-react';
 
 interface SettingsProps {
   language: Language;
@@ -168,28 +168,41 @@ mQENBF2...[TRUNCATED FOR SECURITY]...
       </div>
 
       {/* Danger Zone */}
-      <div className="border border-red-900/50 bg-red-950/10 p-6 flex flex-col items-center text-center space-y-4">
+      <div className="border border-red-900/50 bg-red-950/10 p-6 flex flex-col items-center text-center space-y-6">
           <div className="flex items-center gap-2 text-red-500">
               <AlertTriangle size={24} />
               <h3 className="font-bold uppercase tracking-wider">{t(language, 'settings.section_danger')}</h3>
           </div>
           <p className="text-xs text-gray-500 max-w-md">
-              Immediately wipes all local session data, encryption keys, and active cart items. This action cannot be undone.
+              Advanced actions for emergency situations. Use with extreme caution.
           </p>
-          <button 
-            onClick={handleWipe}
-            disabled={wiping}
-            className={`bg-red-900/20 hover:bg-red-600 hover:text-white text-red-500 border border-red-800 py-3 px-8 font-bold uppercase tracking-widest transition-all ${wiping ? 'w-full' : 'w-auto'}`}
-          >
-              {wiping ? (
-                  <span className="flex items-center justify-center gap-2">
-                      <Trash2 size={16} className="animate-bounce" />
-                      {t(language, 'settings.wipe_confirm')}
-                  </span>
-              ) : (
-                  t(language, 'settings.wipe_btn')
+          
+          <div className="flex gap-4 w-full justify-center">
+              <button 
+                onClick={handleWipe}
+                disabled={wiping}
+                className={`bg-red-900/20 hover:bg-red-600 hover:text-white text-red-500 border border-red-800 py-3 px-6 font-bold uppercase tracking-widest transition-all ${wiping ? 'w-full' : 'w-auto'}`}
+              >
+                  {wiping ? (
+                      <span className="flex items-center justify-center gap-2">
+                          <Trash2 size={16} className="animate-bounce" />
+                          {t(language, 'settings.wipe_confirm')}
+                      </span>
+                  ) : (
+                      t(language, 'settings.wipe_btn')
+                  )}
+              </button>
+
+              {!wiping && (
+                  <button 
+                    onClick={() => onNavigate(ViewState.TAKEDOWN)}
+                    className="bg-blue-900/20 hover:bg-blue-600 hover:text-white text-blue-500 border border-blue-800 py-3 px-6 font-bold uppercase tracking-widest transition-all flex items-center gap-2"
+                  >
+                      <Siren size={16} />
+                      {t(language, 'settings.raid_btn')}
+                  </button>
               )}
-          </button>
+          </div>
       </div>
 
       <div className="pt-4 text-center">

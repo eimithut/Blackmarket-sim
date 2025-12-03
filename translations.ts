@@ -11,12 +11,13 @@ type TranslationKey =
   | 'cart.title' | 'cart.empty' | 'cart.empty_sub' | 'cart.reserved' | 'cart.quantity' | 'cart.total_escrow' | 'cart.checkout_btn' | 'cart.warning'
   | 'settings.title' | 'settings.language' | 'settings.account' | 'settings.pgp_key' 
   | 'settings.section_general' | 'settings.section_security' | 'settings.section_danger'
-  | 'settings.currency' | 'settings.notifications' | 'settings.javascript' | 'settings.images' | 'settings.autologout' | 'settings.wipe_btn' | 'settings.wipe_confirm'
+  | 'settings.currency' | 'settings.notifications' | 'settings.javascript' | 'settings.images' | 'settings.autologout' | 'settings.wipe_btn' | 'settings.wipe_confirm' | 'settings.raid_btn'
   | 'app.disclaimer' | 'app.footer_text' | 'app.footer_tor' | 'app.notification_added' | 'app.order_success'
   | 'login.title' | 'login.username' | 'login.password' | 'login.captcha' | 'login.enter_btn' | 'login.error_captcha'
   | 'payment.title' | 'payment.instruction' | 'payment.wallet_label' | 'payment.timer' | 'payment.status_awaiting' | 'payment.status_confirming' | 'payment.status_confirmed' | 'payment.cancel_btn' | 'payment.simulate_btn'
   | 'pgp.title' | 'pgp.encrypt_btn' | 'pgp.decrypt_btn' | 'pgp.input_placeholder' | 'pgp.copy_btn' | 'pgp.clear_btn' | 'pgp.close_btn' | 'pgp.generated'
-  | 'loading.mem' | 'loading.bios' | 'loading.net' | 'loading.tor1' | 'loading.tor2' | 'loading.tor3' | 'loading.handshake' | 'loading.keys' | 'loading.ledger' | 'loading.assets' | 'loading.done' | 'loading.access_granted';
+  | 'loading.mem' | 'loading.bios' | 'loading.net' | 'loading.tor1' | 'loading.tor2' | 'loading.tor3' | 'loading.handshake' | 'loading.keys' | 'loading.ledger' | 'loading.assets' | 'loading.done' | 'loading.access_granted'
+  | 'takedown.title' | 'takedown.subtitle' | 'takedown.text';
 
 const en: Record<TranslationKey, string> = {
   'nav.market': '[MARKETPLACE]',
@@ -75,6 +76,7 @@ const en: Record<TranslationKey, string> = {
   'settings.autologout': 'Auto-Logout Timer',
   'settings.wipe_btn': 'WIPE SESSION DATA',
   'settings.wipe_confirm': 'SESSION DESTROYED',
+  'settings.raid_btn': 'SIMULATE RAID / TAKEDOWN',
   'app.disclaimer': 'SIMULATION ONLY. ALL ITEMS FICTIONAL. DO NOT ATTEMPT REAL ILLEGAL TRANSACTIONS.',
   'app.footer_text': 'SHADOWROUTE DECENTRALIZED MARKET // v3.0.1-alpha',
   'app.footer_tor': 'TOR HIDDEN SERVICE: 7357...onion',
@@ -114,7 +116,10 @@ const en: Record<TranslationKey, string> = {
   'loading.ledger': 'Syncing with Decentralized Ledger...',
   'loading.assets': 'Decrypting Marketplace Assets...',
   'loading.done': 'Secure Connection Established.',
-  'loading.access_granted': 'ACCESS GRANTED'
+  'loading.access_granted': 'ACCESS GRANTED',
+  'takedown.title': 'THIS HIDDEN SITE HAS BEEN SEIZED',
+  'takedown.subtitle': 'by the Federal Bureau of Investigation',
+  'takedown.text': 'The domain name and server infrastructure have been seized by the Federal Bureau of Investigation in accordance with a seizure warrant issued pursuant to 18 U.S.C. §§ 981 and 982, as part of a joint law enforcement operation by the FBI, Europol, and the Bundeskriminalamt.'
 };
 
 const de: Record<TranslationKey, string> = {
@@ -174,6 +179,7 @@ const de: Record<TranslationKey, string> = {
   'settings.autologout': 'Auto-Logout Timer',
   'settings.wipe_btn': 'SESSION DATEN LÖSCHEN',
   'settings.wipe_confirm': 'SESSION ZERSTÖRT',
+  'settings.raid_btn': 'RAID / TAKEDOWN SIMULIEREN',
   'app.disclaimer': 'NUR SIMULATION. ALLE ARTIKEL SIND FIKTIV. VERSUCHEN SIE KEINE ECHTEN ILLEGALEN TRANSAKTIONEN.',
   'app.footer_text': 'SHADOWROUTE DEZENTRALER MARKTPLATZ // v3.0.1-alpha',
   'app.footer_tor': 'TOR HIDDEN SERVICE: 7357...onion',
@@ -213,7 +219,10 @@ const de: Record<TranslationKey, string> = {
   'loading.ledger': 'Synchronisiere mit dezentralem Ledger...',
   'loading.assets': 'Entschlüssele Marktplatz-Assets...',
   'loading.done': 'Sichere Verbindung hergestellt.',
-  'loading.access_granted': 'ZUGRIFF GEWÄHRT'
+  'loading.access_granted': 'ZUGRIFF GEWÄHRT',
+  'takedown.title': 'DIESE VERSTECKTE SEITE WURDE BESCHLAGNAHMT',
+  'takedown.subtitle': 'durch das Federal Bureau of Investigation',
+  'takedown.text': 'Der Domainname und die Serverinfrastruktur wurden vom Federal Bureau of Investigation in Übereinstimmung mit einem Beschlagnahmebeschluss gemäß 18 U.S.C. §§ 981 und 982 beschlagnahmt, als Teil einer gemeinsamen Strafverfolgungsoperation von FBI, Europol und dem Bundeskriminalamt.'
 };
 
 export const translations = { en, de };

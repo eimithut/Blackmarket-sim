@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Navbar } from './components/Navbar';
 import { Marketplace } from './components/Marketplace';
@@ -8,6 +9,7 @@ import { Login } from './components/Login';
 import { Payment } from './components/Payment';
 import { LoadingScreen } from './components/LoadingScreen';
 import { DigitalAssetPreview } from './components/DigitalAssetPreview';
+import { Takedown } from './components/Takedown';
 import { ViewState, Product, CartItem, Language } from './types';
 import { getProducts, getCategories, getReviews } from './constants';
 import { t } from './translations';
@@ -89,6 +91,10 @@ const App: React.FC = () => {
       setView(ViewState.MARKET);
       triggerNotification(t(language, 'app.order_success'));
   };
+
+  if (view === ViewState.TAKEDOWN) {
+      return <Takedown language={language} />;
+  }
 
   if (view === ViewState.LOGIN) {
       return <Login onLogin={() => setView(ViewState.LOADING)} language={language} />;
