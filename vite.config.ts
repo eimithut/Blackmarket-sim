@@ -8,7 +8,8 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react()],
     define: {
-      'process.env.API_KEY': JSON.stringify(env.API_KEY),
+      // Safely stringify the key. If missing, default to empty string to prevent build crash.
+      'process.env.API_KEY': JSON.stringify(env.API_KEY || ''),
     },
     build: {
       rollupOptions: {
